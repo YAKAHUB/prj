@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - FileConvertz</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="{{ url_for('upload_file') }}">Home</a>
+            <a href="{{ url_for('account') }}">Account</a>
+            <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+        </div>
+        <div class="nav-right">
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </nav>
+    <div class="admin-section">
+        <h1>Admin Dashboard</h1>
+        <div class="flash-container">
+            {% for message in get_flashed_messages() %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+        </div>
+        <h2>Update Admin Credentials</h2>
+        <div class="centered-form">
+            <form method="POST">
+                <input type="text" name="new_username" placeholder="New Username" required>
+                <input type="password" name="new_password" placeholder="New Password" required>
+                <input type="hidden" name="action" value="update_admin">
+                <button type="submit">Update Admin</button>
+            </form>
+        </div>
+        <h2>Manage Conversion Rates</h2>
+        <div class="centered-form">
+            <form method="POST">
+                <input type="number" step="0.01" name="mb_per_credit" placeholder="MB per Credit" value="{{ mb_per_credit }}" required>
+                <input type="number" step="0.01" name="usd_per_credit" placeholder="USD per Credit" value="{{ usd_per_credit }}" required>
+                <input type="hidden" name="action" value="update_rates">
+                <button type="submit">Update Rates</button>
+            </form>
+        </div>
+        <h2>Search Users</h2>
+        <form method="POST" class="search-form">
+            <input type="text" name="search_query" placeholder="Search by username" value="{{ search_query }}">
+            <input type="hidden" name="action" value="search_users">
+            <button type="submit">Search</button>
+        </form>
+        <h2>Manage Users</h2>
+        <form method="POST" class="user-table-form">
+            <table>
+                <tr>
+                    <th>Username</th>
+                    <th>Credits</th>
+                    <th>Actions</th>
+                </tr>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user[1] }}</td>
+                        <td>
+                            <input type="number" name="credits" value="{{ user[2] }}" min="0" required>
+                            <input type="hidden" name="user_id" value="{{ user[0] }}">
+                            <input type="hidden" name="action" value="update_credits">
+                            <button type="submit">Update</button>
+                        </td>
+                        <td>
+                            <input type="hidden" name="user_id" value="{{ user[0] }}">
+                            <input type="hidden" name="action" value="remove_user">
+                            <button type="submit" class="remove-btn">Remove</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+    <footer class="footer">
+        <p>Developed by <a href="https://yakahub.netlify.app/" target="_blank">YAKA HUB Ceylon</a></p>
+    </footer>
+</body>
+</html>

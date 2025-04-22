@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - FileConvertz</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="{{ url_for('upload_file') }}">Home</a>
+            <a href="{{ url_for('account') }}">Account</a>
+            {% if get_user_is_admin(session['user_id']) %}
+                <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+            {% endif %}
+        </div>
+        <div class="nav-right">
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Your Account</h1>
+        <div class="flash-container">
+            {% for message in get_flashed_messages() %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+        </div>
+        <div class="account-container">
+            <div class="account-info">
+                <p><strong>Username:</strong> {{ username }}</p>
+                <p><strong>Email:</strong> {{ email }}</p>
+                <p><strong>Credits:</strong> {{ credits }}</p>
+            </div>
+            <p><a href="{{ url_for('change_password') }}">Change Password</a></p>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>Developed by <a href="https://yakahub.netlify.app/" target="_blank">YAKA HUB Ceylon</a></p>
+    </footer>
+</body>
+</html>
